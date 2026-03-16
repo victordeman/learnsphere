@@ -92,3 +92,32 @@ export async function updatePassword(formData: FormData) {
 
   redirect('/auth/signin?message=Password updated successfully')
 }
+
+export async function updateProfile(formData: FormData) {
+  const supabase = await createClient()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    throw new Error('Unauthorized')
+  }
+
+  const fullName = formData.get('fullName') as string
+  const preferredModel = formData.get('preferredModel') as string
+
+  const { error } = await (supabase
+    .from('profiles') as any)
+    .update({
+      full_name: fullName,
+      preferred_model: preferredModel,
+    })
+    .eq('id', user.id)
+
+  if (error) {
+    throw new Error(error.message)
+  }
+
+  revalidatePath('/profile')
+}
