@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS public.roles (
 
 -- Seed initial roles
 INSERT INTO public.roles (name, description)
-VALUES
+VALUES 
     ('learner', 'Standard learner account'),
     ('admin', 'Administrator with full access')
 ON CONFLICT (name) DO NOTHING;
