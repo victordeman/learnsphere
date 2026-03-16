@@ -53,7 +53,7 @@ export async function middleware(request: NextRequest) {
       .eq('id', user?.id as string)
       .single()
 
-    const role = profile ? (profile as any).role : null
+    const role = profile ? profile.role : null
 
     if (role !== 'admin') {
       const url = request.nextUrl.clone()

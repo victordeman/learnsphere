@@ -3,8 +3,8 @@ import { getModel, ModelProvider } from './model-router';
 import { EvaluationSchema, PerformanceSchema } from './schemas';
 
 export async function evaluateSubmission(
-  taskContent: any,
-  submission: any,
+  taskContent: unknown,
+  submission: unknown,
   provider: ModelProvider = 'openai',
   modelId: string = 'gpt-4o'
 ) {
@@ -20,7 +20,7 @@ export async function evaluateSubmission(
 }
 
 export async function evaluatePerformance(
-  submissions: any[],
+  submissions: unknown[],
   provider: ModelProvider = 'openai',
   modelId: string = 'gpt-4o'
 ) {
