@@ -9,12 +9,32 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      roles: {
+        Row: {
+          id: string
+          name: string
+          description: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          description?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          description?: string | null
+          created_at?: string
+        }
+      }
       profiles: {
         Row: {
           id: string
           email: string
           full_name: string | null
-          role: 'learner' | 'admin'
+          role: 'learner' | 'admin' | null
           preferred_model: string | null
           created_at: string
         }
@@ -22,7 +42,7 @@ export interface Database {
           id: string
           email: string
           full_name?: string | null
-          role?: 'learner' | 'admin'
+          role?: 'learner' | 'admin' | null
           preferred_model?: string | null
           created_at?: string
         }
@@ -30,8 +50,37 @@ export interface Database {
           id?: string
           email?: string
           full_name?: string | null
-          role?: 'learner' | 'admin'
+          role?: 'learner' | 'admin' | null
           preferred_model?: string | null
+          created_at?: string
+        }
+      }
+      sessions: {
+        Row: {
+          id: string
+          user_id: string
+          login_time: string
+          logout_time: string | null
+          ip_address: string | null
+          user_agent: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          login_time?: string
+          logout_time?: string | null
+          ip_address?: string | null
+          user_agent?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          login_time?: string
+          logout_time?: string | null
+          ip_address?: string | null
+          user_agent?: string | null
           created_at?: string
         }
       }
