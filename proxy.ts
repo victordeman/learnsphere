@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 import { Database } from './lib/db/types'
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   let response = NextResponse.next({
     request: {
       headers: request.headers,
@@ -18,7 +19,7 @@ export async function middleware(request: NextRequest) {
           return request.cookies.getAll()
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
           response = NextResponse.next({
             request,
           })
@@ -32,7 +33,7 @@ export async function middleware(request: NextRequest) {
 
   const {
     data: { user },
-  } = await supabase.auth.getUser()
+  } = await supabase.auth.getUser().catch(() => ({ data: { user: null } }))
 
   // Protected routes logic
   const isProtectedRoute = request.nextUrl.pathname.startsWith('/profile') || 
@@ -46,14 +47,18 @@ export async function middleware(request: NextRequest) {
   }
 
   // Admin route protection
-  if (request.nextUrl.pathname.startsWith('/admin')) {
-    const { data: profile } = await (supabase
-      .from('profiles') as any)
-      .select('role')
-      .eq('id', user?.id as string)
-      .single()
-
-    const role = profile ? profile.role : null
+  if (request.nextUrl.pathname.startsWith('/admin') && user) {
+    let role = null;
+    try {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single()
+      role = profile ? (profile as any).role : null
+    } catch (e) {
+      console.error('Error fetching profile in middleware:', e)
+    }
 
     if (role !== 'admin') {
       const url = request.nextUrl.clone()
