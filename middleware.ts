@@ -47,8 +47,8 @@ export async function middleware(request: NextRequest) {
 
   // Admin route protection
   if (request.nextUrl.pathname.startsWith('/admin')) {
-    const { data: profile } = await supabase
-      .from('profiles')
+    const { data: profile } = await (supabase
+      .from('profiles') as any)
       .select('role')
       .eq('id', user?.id as string)
       .single()
