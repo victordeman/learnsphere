@@ -25,7 +25,7 @@ function SignInForm() {
   useEffect(() => {
     const msg = searchParams.get('message')
     if (msg) {
-      setMessage(msg)
+      setTimeout(() => setMessage(msg), 0)
     }
   }, [searchParams])
 

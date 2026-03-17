@@ -5,7 +5,7 @@ import { Sun, Moon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useSyncExternalStore } from "react"
 
-function subscribe(_callback: () => void) {
+function subscribe() {
   return () => {}
 }
 
