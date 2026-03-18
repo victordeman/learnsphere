@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { AVAILABLE_MODELS } from '@/lib/ai/model-router'
-import { updateProfile } from '../actions'
+import { updateProfile } from '@/app/auth/actions'
 
 export default async function ProfilePage() {
   const supabase = await createClient()
@@ -205,7 +205,7 @@ export default async function ProfilePage() {
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Member Since</span>
                 <span className="font-semibold">
-                  {new Date(profile?.created_at).getFullYear()}
+                  {profile?.created_at ? new Date(profile.created_at).getFullYear() : '—'}
                 </span>
               </div>
             </CardContent>
