@@ -10,61 +10,69 @@ export async function proxy(request: NextRequest) {
     },
   })
 
-  const supabase = createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll()
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
-          response = NextResponse.next({
-            request,
-          })
-          cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options)
-          )
-        },
-      },
-    }
-  )
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser().catch(() => ({ data: { user: null } }))
-
-  // Protected routes logic
-  const isProtectedRoute = request.nextUrl.pathname.startsWith('/profile') || 
-                          request.nextUrl.pathname.startsWith('/admin') ||
-                          request.nextUrl.pathname.startsWith('/learn')
-
-  if (isProtectedRoute && !user) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/auth/signin'
-    return NextResponse.redirect(url)
+  if (!supabaseUrl || !supabaseAnonKey) {
+    console.error('Supabase environment variables are missing')
+    return response
   }
 
-  // Admin route protection
-  if (request.nextUrl.pathname.startsWith('/admin') && user) {
-    let role = null;
-    try {
+  try {
+    const supabase = createServerClient<Database>(
+      supabaseUrl,
+      supabaseAnonKey,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll()
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
+            response = NextResponse.next({
+              request,
+            })
+            cookiesToSet.forEach(({ name, value, options }) =>
+              response.cookies.set(name, value, options)
+            )
+          },
+        },
+      }
+    )
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+
+    // Protected routes logic
+    const isProtectedRoute = request.nextUrl.pathname.startsWith('/profile') || 
+                            request.nextUrl.pathname.startsWith('/admin') ||
+                            request.nextUrl.pathname.startsWith('/learn')
+
+    if (isProtectedRoute && !user) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/auth/signin'
+      return NextResponse.redirect(url)
+    }
+
+    // Admin route protection
+    if (request.nextUrl.pathname.startsWith('/admin') && user) {
       const { data: profile } = await supabase
         .from('profiles')
         .select('role')
         .eq('id', user.id)
         .single()
-      role = profile ? (profile as any).role : null
-    } catch (e) {
-      console.error('Error fetching profile in middleware:', e)
-    }
 
-    if (role !== 'admin') {
-      const url = request.nextUrl.clone()
-      url.pathname = '/'
-      return NextResponse.redirect(url)
+      const role = profile ? (profile as any).role : null
+
+      if (role !== 'admin') {
+        const url = request.nextUrl.clone()
+        url.pathname = '/'
+        return NextResponse.redirect(url)
+      }
     }
+  } catch (error) {
+    console.error('Error in proxy middleware:', error)
   }
 
   return response
