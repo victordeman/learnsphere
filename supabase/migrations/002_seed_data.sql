@@ -76,7 +76,7 @@ BEGIN
   ) ON CONFLICT (email) DO NOTHING;
 
   -- Update Admin Role in public.profiles
-  -- The on_auth_user_created trigger in 001_initial_schema.sql
+  -- The on_auth_user_created trigger in 001_initial_schema.sql 
   -- will have already created the profiles as 'learner'.
   UPDATE public.profiles
   SET role = 'admin'
