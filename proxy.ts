@@ -14,7 +14,7 @@ export async function proxy(request: NextRequest) {
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
   if (!supabaseUrl || !supabaseAnonKey) {
-    console.error('Supabase environment variables are missing')
+    console.error('Supabase environment variables are missing in proxy.ts')
     return response
   }
 
@@ -42,7 +42,12 @@ export async function proxy(request: NextRequest) {
 
     const {
       data: { user },
+      error: userError,
     } = await supabase.auth.getUser()
+
+    if (userError) {
+        console.warn('Auth error in proxy:', userError.message)
+    }
 
     // Protected routes logic
     const isProtectedRoute = request.nextUrl.pathname.startsWith('/profile') || 
@@ -52,16 +57,22 @@ export async function proxy(request: NextRequest) {
     if (isProtectedRoute && !user) {
       const url = request.nextUrl.clone()
       url.pathname = '/auth/signin'
+      // Store the current URL to redirect back after login
+      url.searchParams.set('next', request.nextUrl.pathname)
       return NextResponse.redirect(url)
     }
 
     // Admin route protection
     if (request.nextUrl.pathname.startsWith('/admin') && user) {
-      const { data: profile } = await supabase
+      const { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select('role')
         .eq('id', user.id)
         .single()
+
+      if (profileError) {
+        console.error('Error fetching profile in proxy:', profileError.message)
+      }
 
       const role = profile ? (profile as any).role : null
 
@@ -72,7 +83,7 @@ export async function proxy(request: NextRequest) {
       }
     }
   } catch (error) {
-    console.error('Error in proxy middleware:', error)
+    console.error('Unexpected error in proxy middleware:', error)
   }
 
   return response
