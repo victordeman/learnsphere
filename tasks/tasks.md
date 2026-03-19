@@ -26,9 +26,9 @@
 
 ---
 
-## Phase 2 — Authentication & User Management
+## Phase 2 — Authentication & User Management (IN PROGRESS)
 
-- [ ] Set up Supabase client (`lib/db/client.ts`) and environment variables (`.env.example`)
+- [x] Set up Supabase client (`lib/db/client.ts`) and environment variables (`.env.example`)
 - [ ] Create Supabase migration `001_initial_schema.sql` (profiles, roles, sessions)
 - [ ] Generate Supabase types (`supabase/types.ts`, `lib/db/types.ts`)
 - [ ] Implement `middleware.ts` for auth + role-based route protection
@@ -204,7 +204,7 @@
 | Phase | Description                        | Status       |
 |-------|------------------------------------|--------------|
 | 1     | Project Scaffolding & Homepage     | COMPLETED    |
-| 2     | Authentication & User Management   | Not Started  |
+| 2     | Authentication & User Management   | IN PROGRESS  |
 | 3     | AI Model Router & Core Infra       | Not Started  |
 | 4     | Task Generator Engine              | Not Started  |
 | 5     | Learning Experience (Student)      | Not Started  |

@@ -9,7 +9,11 @@ export async function createClient() {
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
   if (!supabaseUrl || !supabaseAnonKey) {
-    throw new Error('Supabase environment variables (NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY) are not defined.')
+    throw new Error(
+      'Supabase environment variables (NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY) are not defined. ' +
+      'Please ensure these variables are set in your .env.local file for local development or in your Vercel project settings for deployment. ' +
+      'Refer to .env.example for the required format.'
+    )
   }
 
   return createServerClient<Database>(
