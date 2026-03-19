@@ -25,7 +25,9 @@ BEGIN
     confirmation_token,
     email_change,
     email_change_token_new,
-    recovery_token
+    recovery_token,
+    aud,
+    role
   )
   VALUES (
     admin_id,
@@ -40,7 +42,9 @@ BEGIN
     '',
     '',
     '',
-    ''
+    '',
+    'authenticated',
+    'authenticated'
   ) ON CONFLICT (email) DO NOTHING;
 
   -- Insert Student User into auth.users
@@ -57,7 +61,9 @@ BEGIN
     confirmation_token,
     email_change,
     email_change_token_new,
-    recovery_token
+    recovery_token,
+    aud,
+    role
   )
   VALUES (
     student_id,
@@ -72,7 +78,9 @@ BEGIN
     '',
     '',
     '',
-    ''
+    '',
+    'authenticated',
+    'authenticated'
   ) ON CONFLICT (email) DO NOTHING;
 
   -- Update Admin Role in public.profiles

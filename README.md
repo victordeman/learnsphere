@@ -97,5 +97,9 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 
 ### Supabase Integration
 Ensure your Supabase project is configured with the following:
-- Run the initial migration found in `supabase/migrations/001_initial_schema.sql` to set up the database schema and RLS policies.
-- Configure Authentication (Email/Password or Social Providers) in the Supabase dashboard.
+0. Set up your `.env.local` file by copying `.env.example` and filling in your `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+1. Run the initial migration found in `supabase/migrations/001_initial_schema.sql` to set up the database schema and RLS policies.
+2. Run the seed data migration in `supabase/migrations/002_seed_data.sql` to initialize the database with an admin and a student user.
+   - **Admin:** `admin@learnsphere.com` / `password123`
+   - **Student:** `student@learnsphere.com` / `password123`
+3. Configure Authentication (Email/Password) in the Supabase dashboard.
