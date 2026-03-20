@@ -7,9 +7,10 @@ DO $$
 DECLARE
   admin_id UUID := gen_random_uuid();
   student_id UUID := gen_random_uuid();
-  admin_email TEXT := 'admin@learnsphere.com';
-  student_email TEXT := 'student@learnsphere.com';
-  hashed_password TEXT := crypt('password123', gen_salt('bf'));
+  admin_email TEXT := 'victor@learnsphere.com';
+  student_email TEXT := 'mark@learnsphere.com';
+  admin_password TEXT := crypt('victor@2026', gen_salt('bf'));
+  student_password TEXT := crypt('mark@2026', gen_salt('bf'));
 BEGIN
   -- Insert Admin User into auth.users
   INSERT INTO auth.users (
@@ -33,10 +34,10 @@ BEGIN
     admin_id,
     '00000000-0000-0000-0000-000000000000',
     admin_email,
-    hashed_password,
+    admin_password,
     now(),
     '{"provider":"email","providers":["email"]}',
-    '{"full_name":"System Administrator"}',
+    '{"full_name":"Victor"}',
     now(),
     now(),
     '',
@@ -69,10 +70,10 @@ BEGIN
     student_id,
     '00000000-0000-0000-0000-000000000000',
     student_email,
-    hashed_password,
+    student_password,
     now(),
     '{"provider":"email","providers":["email"]}',
-    '{"full_name":"Jane Learner"}',
+    '{"full_name":"Mark"}',
     now(),
     now(),
     '',
