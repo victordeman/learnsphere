@@ -100,6 +100,6 @@ Ensure your Supabase project is configured with the following:
 0. Set up your `.env.local` file by copying `.env.example` and filling in your `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 1. Run the initial migration found in `supabase/migrations/001_initial_schema.sql` to set up the database schema and RLS policies.
 2. Run the seed data migration in `supabase/migrations/002_seed_data.sql` to initialize the database with an admin and a student user.
-   - **Admin:** `admin@learnsphere.com` / `password123`
-   - **Student:** `student@learnsphere.com` / `password123`
+  - **Admin:** `victor@learnsphere.com` / `victor@2026`
+  - **Student:** `mark@learnsphere.com` / `mark@2026`
 3. Configure Authentication (Email/Password) in the Supabase dashboard.
